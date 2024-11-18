@@ -206,7 +206,7 @@ export default function FormCadProdutos(props) {
                     <Form.Label>Válido até:</Form.Label>
                     <Form.Control
                         required
-                        type="text"
+                        type="date"
                         id="dataValidade"
                         name="dataValidade"
                         value={produto.dataValidade}
