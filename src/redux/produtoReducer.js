@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { consultarProduto } from "../servicos/servicoProduto";
+import { consultarProduto, excluirProduto } from "../servicos/servicoProduto";
 
 import ESTADO from "./estados";
 
-const buscarProdutos = createAsyncThunk('buscarProdutos', async ()=>{
+export const buscarProdutos = createAsyncThunk('buscarProdutos', async ()=>{
     //lista de produtos
     const resultado = await consultarProduto();
     //se for um array/lista a consulta funcionou
@@ -13,7 +13,7 @@ const buscarProdutos = createAsyncThunk('buscarProdutos', async ()=>{
             return {
                 "status":true,
                 "mensagem":"Produtos recuperados com sucesso",
-                listaDeProdutos
+                "listaDeProdutos":resultado
             }
         }
         else
@@ -32,6 +32,27 @@ const buscarProdutos = createAsyncThunk('buscarProdutos', async ()=>{
             "listaDeProdutos":[]
         }
     }
+});
+
+export const apagarProduto = createAsyncThunk('apagarProduto', async (produto)=>{
+//dar previsibilidade ao conteúdo do payload
+    //lista de produtos
+    console.log(produto);
+    const resultado = await excluirProduto(produto);
+    //se for um array/lista a consulta funcionou
+    console.log(resultado);
+    try {
+            return {
+                "status":resultado.status,
+                "mensagem":resultado.mensagem,
+            }
+    }
+    catch(erro){
+        return {
+            "status":false,
+            "mensagem":"Erro: " + erro.message,
+        }
+    } 
 });
 
 const produtoReducer = createSlice({
@@ -63,6 +84,19 @@ const produtoReducer = createSlice({
             state.estado=ESTADO.ERRO;
             state.mensagem = action.payload.mensagem;
             state.listaDeProdutos=action.payload.listaDeProdutos;
+        })
+        .addCase(apagarProduto.pending, (state,action) =>{
+            state.estado=ESTADO.PENDENTE;
+            state.mensagem=action.payload.mensagem;
+        })
+        .addCase(apagarProduto.fulfilled,(state,action) =>{
+            state.estado=ESTADO.OCIOSO;
+            state.mensagem=action.payload.mensagem;
+            //altera a lista de produtos?
+        })
+        .addCase(apagarProduto.rejected,(state,action)=>{
+            state.estado=ESTADO.ERRO;
+            state.mensagem=""//action.payload.mensagem;
         })
     }
 });

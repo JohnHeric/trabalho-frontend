@@ -1,7 +1,7 @@
 import { Alert } from "react-bootstrap";
 import FormCadProdutos from "./Formularios/FormCadProduto";
 import Pagina from "../layouts/Pagina";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TabelaProdutos from "./Tabelas/TabelaProdutos";
 //import { produtos } from "../../dados/mockProdutos";
 
@@ -22,12 +22,7 @@ export default function TelaCadastroProduto(props) {
 
     });
 
-    useEffect(()=>{
-        consultarProduto().then((lista)=>{
-            setListaDeProdutos(lista);
-        });
-    },[]); //listaVazia -> didMount
-   
+  
     return (
         <div>
             <Pagina>
