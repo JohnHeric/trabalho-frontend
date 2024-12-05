@@ -11,8 +11,8 @@ export default function TelaLogin() {
         const usuarioDigitado = nomeUsuario.current.value;
         const senhaDigitada   = senha.current.value;
 
-        if (usuarioDigitado === 'admin' &&
-            senhaDigitada   === 'admin')
+        if (usuarioDigitado === 'john' &&
+            senhaDigitada   === 'john')
         {
             setUsuario({
                 "usuario":usuarioDigitado,
