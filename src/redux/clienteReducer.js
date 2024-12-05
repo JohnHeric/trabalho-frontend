@@ -1,8 +1,42 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { consultarCliente, excluirCliente} from "../servicos/servicoCliente";
+import { gravarCliente, alterarCliente, consultarCliente, excluirCliente} from "../servicos/servicoCliente";
 
 import ESTADO from "./estados";
+
+export const incluirCliente = createAsyncThunk('incluirCliente', async (cliente)=>{
+    const resultado = await gravarCliente(cliente);
+
+    try {
+        return {
+            "status": resultado.status,
+            "mensagem": resultado.mensagem,
+            cliente
+        };
+    } catch (erro) {
+        return {
+            "status": false,
+            "mensagem": "Erro: " + erro.mensagem
+        };
+    };
+})
+
+export const editarCliente = createAsyncThunk('editarCliente', async (cliente)=>{
+    const resultado = await alterarCliente(cliente);
+
+    try {
+        return {
+            "status": resultado.status,
+            "mensagem": resultado.mensagem,
+            cliente
+        };
+    } catch (erro) {
+        return {
+            "status": false,
+            "mensagem": "Erro: " + erro.mensagem
+        };
+    };
+})
 
 export const buscarClientes = createAsyncThunk('buscarClientes', async ()=>{
     //lista de produtos
@@ -97,6 +131,43 @@ const clienteReducer = createSlice({
         .addCase(apagarCliente.rejected,(state,action)=>{
             state.estado=ESTADO.ERRO;
             state.mensagem=""//action.payload.mensagem;
+        })
+        .addCase(incluirCliente.pending, (state, action) => {
+            state.estado = ESTADO.PENDENTE;
+            state.mensagem = "Processando requisição (Incluindo cliente)";
+        })
+        .addCase(incluirCliente.fulfilled, (state, action) => {
+            if (action.payload.status) {
+                state.estado = ESTADO.OCIOSO;
+                state.mensagem = action.payload.mensagem;
+                state.listaDeClientes.push(action.payload.cliente);
+            } else {
+                state.estado = ESTADO.ERRO;
+                state.mensagem = action.payload.mensagem;
+            }
+        })
+        .addCase(incluirCliente.rejected, (state, action) => {
+            state.estado = ESTADO.ERRO;
+            state.mensagem = action.payload.mensagem;
+        })
+        .addCase(editarCliente.pending, (state, action) => {
+            state.estado = ESTADO.PENDENTE;
+            state.mensagem = "Processando requisição (Atualizando cliente)";
+        })
+        .addCase(editarCliente.fulfilled, (state, action) => {
+            if (action.payload.status) {
+                state.estado = ESTADO.OCIOSO;
+                state.mensagem = action.payload.mensagem;
+                const i = state.listaDeClientes.findIndex((cliente) => cliente.codigo === action.payload.cliente.codigo);
+                state.listaDeClientes[i] = action.payload.cliente;
+            } else {
+                state.estado = ESTADO.ERRO;
+                state.mensagem = action.payload.mensagem;
+            }
+        })
+        .addCase(editarCliente.rejected, (state, action) => {
+            state.estado = ESTADO.ERRO;
+            state.mensagem = action.payload.mensagem;
         })
     }
 });
