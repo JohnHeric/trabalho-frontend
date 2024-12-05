@@ -106,6 +106,7 @@ export default function FormCadProdutos(props) {
                 <Form.Group as={Col} md="4">
                     <Form.Label>Código</Form.Label>
                     <Form.Control
+                        //disabled
                         required
                         type="text"
                         id="codigo"
@@ -206,7 +207,7 @@ export default function FormCadProdutos(props) {
                     <Form.Label>Válido até:</Form.Label>
                     <Form.Control
                         required
-                        type="date"
+                        type="text"
                         id="dataValidade"
                         name="dataValidade"
                         value={produto.dataValidade}
