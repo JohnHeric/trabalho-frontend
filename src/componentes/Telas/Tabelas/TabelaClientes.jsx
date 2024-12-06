@@ -1,13 +1,12 @@
 import { Alert, Button, Container, Spinner, Table } from "react-bootstrap";
 import { excluirCliente } from '../../../servicos/servicoCliente';
 import { useSelector, useDispatch } from "react-redux";
-import { buscarClientes, apagarCliente } from "../../../redux/clienteReducer";
+import { buscarClientes, apagarCliente, atualizarCliente} from "../../../redux/clienteReducer";
 import { useEffect } from "react";
 
 import ESTADO from "../../../redux/estados";
 
 export default function TabelaClientes(props) {
-    //recuperar o estado da aplicação / fatia produto
     const {estado, mensagem, listaDeClientes} = useSelector(state => state.cliente);
     const despachante = useDispatch();
     
@@ -16,13 +15,17 @@ export default function TabelaClientes(props) {
     },[despachante]); //ciclo de vida de atualização do componente
 
     function editarCliente(cliente){
+        const clienteEditado = {
+            ...cliente
+        }
+
         props.setModoEdicao(true);
-        props.setProdutoSelecionado(cliente)
+        props.setClienteSelecionado(clienteEditado)
         props.setExibirTabela(false);
     }
 
     function excluirClienteFrontEnd(cliente){
-        if(window.confirm("Deseja realmente excluir o produto " + cliente.descricao)){
+        if(window.confirm("Deseja realmente excluir o cliente " + cliente.nome)){
             despachante(apagarCliente(cliente));
         }
     }

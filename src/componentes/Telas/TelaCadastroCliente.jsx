@@ -1,15 +1,12 @@
 import { Alert } from "react-bootstrap";
-import FormCadClientes from "./Formularios/FormCadCliente";
-import Pagina from "../layouts/Pagina";
+import FormCadClientes from "./Formularios/FormCadCliente.jsx";
+import Pagina from "../layouts/Pagina.jsx";
 import { useState } from "react";
-import TabelaClientes from "./Tabelas/TabelaClientes";
-//import { produtos } from "../../dados/mockProdutos";
-
+import TabelaClientes from "./Tabelas/TabelaClientes.jsx";
 
 export default function TelaCadastroCliente(props) {
     const [exibirTabela, setExibirTabela] = useState(true);
     const [modoEdicao, setModoEdicao] = useState(false);
-    //const [produtos, setProdutos] = useState([]);
     const [clienteSelecionado, setClienteSelecionado] = useState({
         codigo:0,
         nome:"",
@@ -32,6 +29,7 @@ export default function TelaCadastroCliente(props) {
                         <TabelaClientes setExibirTabela={setExibirTabela}
                                         setModoEdicao={setModoEdicao}
                                         setClienteSelecionado={setClienteSelecionado} /> :
+                                        
                         <FormCadClientes setExibirTabela={setExibirTabela}
                                          clienteSelecionado={clienteSelecionado}
                                          setClienteSelecionado={setClienteSelecionado}
