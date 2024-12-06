@@ -13,11 +13,9 @@ function manipularSubmissao(evento) {
    if (form.checkValidity()) {
 
        if (!props.modoEdicao) {
-           //cadastrar o produto
            gravarCliente(cliente)
            .then((resultado)=>{
                if (resultado.status){
-                   //exibir tabela com o produto incluído
                    props.setExibirTabela(true);
                }
                else{
@@ -26,15 +24,6 @@ function manipularSubmissao(evento) {
            });
        }
        else {
-           //editar o produto
-           /*altera a ordem dos registros
-           props.setListaDeProdutos([...props.listaDeProdutos.filter(
-               (item) => {
-                   return item.codigo !== produto.codigo;
-               }
-           ), produto]);*/
-
-           //não altera a ordem dos registros
            props.setListaDeClientes(props.listaDeClientes.map((item) => {
                if (item.codigo !== cliente.codigo)
                    return item
@@ -42,7 +31,6 @@ function manipularSubmissao(evento) {
                    return cliente
            }));
 
-           //voltar para o modo de inclusão
            props.setModoEdicao(false);
            props.setClienteSelecionado({
                codigo: 0,
@@ -88,7 +76,6 @@ return (
                <Form.Control.Feedback type='invalid'>Por favor, informe o código do produto!</Form.Control.Feedback>
            </Form.Group>
        </Row>
-
 
        <Row className="mb-4">
            <Form.Group as={Col} md="12">

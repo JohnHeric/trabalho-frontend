@@ -38,10 +38,26 @@ export const editarCliente = createAsyncThunk('editarCliente', async (cliente)=>
     };
 })
 
+export const apagarCliente = createAsyncThunk('apagarCliente', async (cliente)=>{
+    console.log(cliente);
+    const resultado = await excluirCliente(cliente);
+    console.log(resultado);
+    try {
+            return {
+                "status":resultado.status,
+                "mensagem":resultado.mensagem,
+            }
+    }
+    catch(erro){
+        return {
+            "status":false,
+            "mensagem":"Erro: " + erro.message,
+        }
+    } 
+});
+
 export const buscarClientes = createAsyncThunk('buscarClientes', async ()=>{
-    //lista de produtos
     const resultado = await consultarCliente();
-    //se for um array/lista a consulta funcionou
     try {
         if (Array.isArray(resultado)){
             return {
@@ -66,27 +82,6 @@ export const buscarClientes = createAsyncThunk('buscarClientes', async ()=>{
             "listaDeClientes":[]
         }
     }
-});
-
-export const apagarCliente = createAsyncThunk('apagarCliente', async (cliente)=>{
-//dar previsibilidade ao conteúdo do payload
-    //lista de produtos
-    console.log(cliente);
-    const resultado = await excluirCliente(cliente);
-    //se for um array/lista a consulta funcionou
-    console.log(resultado);
-    try {
-            return {
-                "status":resultado.status,
-                "mensagem":resultado.mensagem,
-            }
-    }
-    catch(erro){
-        return {
-            "status":false,
-            "mensagem":"Erro: " + erro.message,
-        }
-    } 
 });
 
 const clienteReducer = createSlice({
@@ -126,11 +121,10 @@ const clienteReducer = createSlice({
         .addCase(apagarCliente.fulfilled,(state,action) =>{
             state.estado=ESTADO.OCIOSO;
             state.mensagem=action.payload.mensagem;
-            //altera a lista de produtos?
         })
         .addCase(apagarCliente.rejected,(state,action)=>{
             state.estado=ESTADO.ERRO;
-            state.mensagem=""//action.payload.mensagem;
+            state.mensagem=""
         })
         .addCase(incluirCliente.pending, (state, action) => {
             state.estado = ESTADO.PENDENTE;
